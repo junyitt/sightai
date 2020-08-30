@@ -4,6 +4,8 @@ import torch
 import numpy as np
 import torch.optim as optim
 from PIL import Image
+import cv2
+import skimage
 import torchvision.transforms as transforms
 # custom modules
 
@@ -293,6 +295,18 @@ class Model:
 
         
         with torch.no_grad():
+            # CV2 version
+            # img = cv2.imread(image_file)
+            # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            # original_size = img.shape[1], img.shape[0] # width, height 
+            # width, height = args.input_width, args.input_height
+            # img = cv2.resize(img, (width, height)) # resize
+            # plt.imshow(img)
+            # plt.savefig('cv2.png')
+            # img = np.transpose(img, axes=(2, 0, 1))
+            # data = torch.Tensor(img)
+
+            # PIL version
             img = Image.open(image_file)
             original_size = img.size
             trans1 = transforms.ToTensor()
@@ -306,10 +320,14 @@ class Model:
             left = data.squeeze()
             disps = self.model(left)
             disp = disps[0][:, 0, :, :].unsqueeze(1)
+
             disparities = disp[0].squeeze().cpu().numpy()
             disparities_pp = post_process_disparity(disps[0][:, 0, :, :].cpu().numpy())
 
-            return disparities, disparities_pp, original_size
+            disp2 = skimage.transform.resize(disparities.squeeze(), original_size[:2], mode='constant')
+            disp_pp2 = skimage.transform.resize(disparities_pp.squeeze(), original_size[:2], mode='constant')
+
+            return disp2, disp_pp2, original_size
 
 
     def test(self):

@@ -8,16 +8,26 @@ conda env create --file environment.yml
 conda activate sightai
 ```
 
+# Weights
+Download weights for [MonoDepth](https://u.pcloud.link/publink/show?code=XZb5r97ZD7HDDlc237BMjoCbWJVYMm0FLKcy) and [YOLOv4](https://drive.google.com/file/d/1cewMfusmPjYWbrnuJRuKhPMwRe_b9PaT/view) (see Credits).
+```
+place them under:
+./pretrained/monodepth_resnet18_001.pth 
+./pretrained/yolov4.weights
+```
+
+
+
 # Example scripts:
 ## run depth map
 ```
 cd src
-python depth_map.py
+python demo_depth_map.py
 ```
 
 ## run bbox
 ```
-python demo.py -cfgfile cfg/yolov4.cfg -weightfile yolov4.weights -imgfile ./001_L.png
+python demo_yolo.py
 ```
 
 # Architecture
@@ -39,7 +49,9 @@ https://www.youtube.com/watch?v=5H3UW2L_TlM
 <https://github.com/Tianxiaomo/pytorch-YOLOv4>
 
 ### Unofficial implementation of Unsupervised Monocular Depth Estimation neural network MonoDepth in PyTorch by OniroAI
-<https://github.com/Tianxiaomo/pytorch-YOLOv4>
+<https://github.com/OniroAI/MonoDepth-PyTorch>
+
+
 
 
 

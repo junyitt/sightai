@@ -20,4 +20,5 @@ dependencies:
         - tqdm==4.43.0
         - easydict==1.9
         - opencv_python
+        - logzero
 
