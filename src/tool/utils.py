@@ -7,7 +7,7 @@ import numpy as np
 import itertools
 import struct  # get_image_size
 import imghdr  # get_image_size
-
+import matplotlib.pyplot as plt
 
 def sigmoid(x):
     return 1.0 / (np.exp(-x) + 1.)
@@ -96,7 +96,7 @@ def nms_cpu(boxes, confs, nms_thresh=0.5, min_mode=False):
 
 
 
-def plot_boxes_cv2(img, boxes, savename=None, class_names=None, color=None):
+def plot_boxes_cv2(img, boxes, savename=None, class_names=None, color=None, disp = None):
     import cv2
     img = np.copy(img)
     colors = np.array([[1, 0, 1], [0, 0, 1], [0, 1, 1], [0, 1, 0], [1, 1, 0], [1, 0, 0]], dtype=np.float32)
@@ -125,7 +125,7 @@ def plot_boxes_cv2(img, boxes, savename=None, class_names=None, color=None):
         if len(box) >= 7 and class_names:
             cls_conf = box[5]
             cls_id = box[6]
-            print('%s: %f' % (class_names[cls_id], cls_conf))
+            # print('%s: %f' % (class_names[cls_id], cls_conf))
             classes = len(class_names)
             offset = cls_id * 123457 % classes
             red = get_color(2, offset, classes)
@@ -133,11 +133,26 @@ def plot_boxes_cv2(img, boxes, savename=None, class_names=None, color=None):
             blue = get_color(0, offset, classes)
             if color is None:
                 rgb = (red, green, blue)
-            img = cv2.putText(img, class_names[cls_id], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1.2, rgb, 1)
+
+            dist = ""
+            if disp is not None:
+                disp_values = []
+                for x in range(x1, x2, 1):
+                    for y in range(y1, y2, 1):
+                        if x < disp.shape[0] and x > 0 and y > 0 and y < disp.shape[1]:
+                            dp = disp[x,y]
+                            disp_values.append(dp)
+                dist = round(100*np.mean(disp_values),2)
+
+            caption = "{} {}".format(class_names[cls_id], dist)
+            # img = cv2.putText(img, caption, (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1.2, rgb, 1)
+            img = cv2.putText(img, caption, (x1, y1), cv2.FONT_HERSHEY_PLAIN, 0.8, rgb, 1)
         img = cv2.rectangle(img, (x1, y1), (x2, y2), rgb, 1)
     if savename:
         print("save plot results to %s" % savename)
         cv2.imwrite(savename, img)
+        plt.imshow(img)
+        plt.savefig("bbox.png")
     return img
 
 

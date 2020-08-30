@@ -324,9 +324,10 @@ class Model:
             disparities = disp[0].squeeze().cpu().numpy()
             disparities_pp = post_process_disparity(disps[0][:, 0, :, :].cpu().numpy())
 
-            disp2 = skimage.transform.resize(disparities.squeeze(), original_size[:2], mode='constant')
-            disp_pp2 = skimage.transform.resize(disparities_pp.squeeze(), original_size[:2], mode='constant')
-
+            # res = (original_size[1], original_size[0])
+            res = original_size[0:2]
+            disp2 = skimage.transform.resize(disparities.squeeze(), res, mode='constant')
+            disp_pp2 = skimage.transform.resize(disparities_pp.squeeze(), res, mode='constant')
             return disp2, disp_pp2, original_size
 
 
