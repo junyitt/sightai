@@ -52,6 +52,10 @@ https://www.youtube.com/watch?v=5H3UW2L_TlM
 <https://github.com/OniroAI/MonoDepth-PyTorch>
 
 
+### BTS (State of the Art Monocular Depth Estimation)
+<https://paperswithcode.com/paper/from-big-to-small-multi-scale-local-planar>
+
+
 
 
 
