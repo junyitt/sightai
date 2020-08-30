@@ -4,3 +4,5 @@ src/media/*
 !src/media/Readme.md
 src/pretrained/*
 !src/pretrained/Readme.md
+src/logs/*
+!src/logs/Readme.md
