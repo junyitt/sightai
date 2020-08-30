@@ -1,6 +1,6 @@
 *.mp4
 *.pyc
-src/media
+src/media/*
 !src/media/Readme.md
-src/pretrained
+src/pretrained/*
 !src/pretrained/Readme.md
