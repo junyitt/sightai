@@ -24,4 +24,6 @@ dependencies:
         - gTTS
         - pyttsx3
         - playsound
-
+        - DepthVisualizer
+        - tensorboard 
+        - albumentations

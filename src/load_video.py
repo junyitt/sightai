@@ -23,8 +23,8 @@ def run_infer(imgfile, j, plot=False):
         engine.say(text)
         engine.runAndWait()
 
-vidcap = cv2.VideoCapture('media/MALAYSIA Kuala Lumpur 15 -Walk- from KL Sentral Monorail Sta. to Muzium Negara MRT Sta.mp4')
-# vidcap = cv2.VideoCapture('media/London Underground to Waterloo incl. South Bank Walking Tour.mp4')
+# vidcap = cv2.VideoCapture('media/MALAYSIA Kuala Lumpur 15 -Walk- from KL Sentral Monorail Sta. to Muzium Negara MRT Sta.mp4')
+vidcap = cv2.VideoCapture('media/London Underground to Waterloo incl. South Bank Walking Tour.mp4')
 if (vidcap.isOpened()== False): 
     print("Error opening video stream or file")
 

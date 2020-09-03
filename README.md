@@ -9,10 +9,10 @@ conda activate sightai
 ```
 
 # Weights
-Download weights for [MonoDepth](https://u.pcloud.link/publink/show?code=XZb5r97ZD7HDDlc237BMjoCbWJVYMm0FLKcy) and [YOLOv4](https://drive.google.com/file/d/1cewMfusmPjYWbrnuJRuKhPMwRe_b9PaT/view) (see Credits).
+Download weights for [BTS](https://drive.google.com/file/d/1_mENn0G9YlLAAr3N8DVDt4Hk2SBbo1pl/view) and [YOLOv4](https://drive.google.com/file/d/1cewMfusmPjYWbrnuJRuKhPMwRe_b9PaT/view) (see Credits).
 ```
 place them under:
-./pretrained/monodepth_resnet18_001.pth 
+./pretrained/bts_latest
 ./pretrained/yolov4.weights
 ```
 
@@ -53,8 +53,8 @@ https://www.youtube.com/watch?v=5H3UW2L_TlM
 
 
 ### BTS (State of the Art Monocular Depth Estimation)
-<https://paperswithcode.com/paper/from-big-to-small-multi-scale-local-planar>
-
+- <https://paperswithcode.com/paper/from-big-to-small-multi-scale-local-planar>
+- <https://github.com/Navhkrin/Bts-PyTorch>
 
 
 

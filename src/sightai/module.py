@@ -12,9 +12,11 @@ from monodepth.main_monodepth_pytorch import Model as DepthModel
 from tool.darknet2pytorch import Darknet
 from tool.utils import plot_boxes_cv2, load_class_names
 from tool.torch_utils import do_detect
-
+from btsdepth.Test import load_data_bts, predict_bts
+import btsdepth.BTS as BTS
 
 def construct_object_table(img, boxes, class_names, disp=None):
+    disp = np.transpose(disp, (1,0))
     boxes = boxes[0]
     width = img.shape[1]
     height = img.shape[0]
@@ -60,7 +62,7 @@ def construct_object_table(img, boxes, class_names, disp=None):
         d["inzone"] = inzone
         d["direction"] = direction
         # d["disp_values"] = disp_values
-        dist = round(100*np.mean(disp_values),2)
+        dist = round(np.mean(disp_values),2)
         d["distance"] = dist
         # if object_name == "car":
         #     plt.hist(disp_values)
@@ -70,22 +72,22 @@ def construct_object_table(img, boxes, class_names, disp=None):
     # add "obstacle"
     disp_values = []
     w1, w2 = int(width/3), int(2*width/3)
-    h1, h2 = int(height/2), int(height)
+    h1, h2 = int(height/2), int(height)-1
     for x in range(w1, w2, 1):
         for y in range(h1, h2, 1):
             dp = disp[x,y]
             disp_values.append(dp)
-    dist = round(100*np.mean(disp_values),2)
+    dist = round(np.mean(disp_values),2)
     add_d = {"object_name": "obstacle", "inzone": True, "direction": "center", "distance": dist}
     d_list.append(add_d)
     df = pd.DataFrame(d_list).sort_values("distance")
     return df
 
 
-def get_instructions(df):
+def get_instructions(df, threshold = 32):
     message = []
     u1 = df["inzone"]
-    u2 = df["distance"] < 1
+    u2 = df["distance"] < threshold
     df1 = df.loc[u1 & u2]
     if df1.shape[0] == 0:
         message.append("Continue straight.")
@@ -119,7 +121,8 @@ class SightAI:
         else:
             self.device = "cpu"
         self.init_log()
-        self.init_depth_model()
+        # self.init_depth_model()
+        self.init_depth_bts_model()
         self.init_yolo_model()
         self.inference(img_path = "image/image/init.png")
     
@@ -166,6 +169,17 @@ class SightAI:
         total_time = round(t1-t0, 2)
         self.log.info("1 - Initiated DepthModel. -- {} minutes {} seconds".format(total_time//60, total_time % 60))
 
+    def init_depth_bts_model(self):
+        t0 = time.time()
+        model_path = "pretrained/bts_latest"
+        self.depth_model = BTS.BtsController()
+        self.depth_model.load_model(model_path)
+        self.depth_model.eval()
+
+        t1 = time.time()
+        total_time = round(t1-t0, 2)
+        self.log.info("1 - Initiated BTS DepthModel. -- {} minutes {} seconds".format(total_time//60, total_time % 60))
+
     def bbox_inference(self, img_path):
         img = cv2.imread(img_path)
         sized = cv2.resize(img, (self.yolo_width, self.yolo_height))
@@ -177,21 +191,22 @@ class SightAI:
         t0 = time.time()
         
         # Depth estimation
-        disp, disp_pp, original_size = self.depth_model.retest(img_path)
-        
+        data, original_size = load_data_bts(img_path)
+        disp = predict_bts(self.depth_model, data, original_size)
+        print(disp)
         # Bounding box
         img, boxes = self.bbox_inference(img_path)    
-        
+
+        # Construct message        
         df = construct_object_table(img, boxes, self.class_names, disp)
         msg = get_instructions(df)
 
         # Plot
         if plot:
-            # plt.imshow(disp_pp, cmap='plasma')
-            # plt.savefig('demo_depth.png')
+            cv2.imwrite('frame/depth_map{}.png'.format(j), disp)
 
-            plt.imshow(disp, cmap='plasma')
-            plt.savefig('frame/depth_map{}.png'.format(j))
+            # plt.imshow(disp, cmap='plasma')
+            # plt.savefig('frame/depth_map{}.png'.format(j))
 
             plot_boxes_cv2(img, boxes[0], savename='frame/bbox{}.png'.format(j), class_names=self.class_names, disp = disp)
 
