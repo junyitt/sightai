@@ -10,6 +10,7 @@ src/logs/*
 src/frame/*
 !src/frame/init.txt
 src/frame2/*
+src/frame*/*
 src/bbox.png
 src/tensorboard/*
 src/data/output/disparities.npy
