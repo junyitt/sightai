@@ -28,7 +28,7 @@ def run_infer(imgfile, j, plot=False):
 
 # vidcap = cv2.VideoCapture('media/MALAYSIA Kuala Lumpur 15 -Walk- from KL Sentral Monorail Sta. to Muzium Negara MRT Sta.mp4')
 # vidcap = cv2.VideoCapture('media/London Underground to Waterloo incl. South Bank Walking Tour.mp4')
-filename = "two_way"
+filename = "confine_space"
 vidcap = cv2.VideoCapture('media/{}.mp4'.format(filename))
 frame_width = int(vidcap.get(3))
 frame_height = int(vidcap.get(4))

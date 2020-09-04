@@ -1,1 +1,0 @@
-pip install DepthVisualizer tensorboard albumentations

@@ -21,9 +21,6 @@ dependencies:
         - easydict==1.9
         - opencv_python
         - logzero
-        - gTTS
-        - pyttsx3
-        - playsound
         - DepthVisualizer
         - tensorboard 
         - albumentations

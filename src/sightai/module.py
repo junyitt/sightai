@@ -188,18 +188,26 @@ class SightAI:
         return img, boxes
 
     def inference(self, img_path, plot = False, j = 0):
+
+        def convert_rgb(dmap):
+            x = np.asarray([dmap]*3)
+            return np.transpose(x, (1,2,0))
+
+
         t0 = time.time()
         
         # Depth estimation
         data, original_size = load_data_bts(img_path)
         disp = predict_bts(self.depth_model, data, original_size)
-        print(disp)
+        # print(disp)
+
         # Bounding box
         img, boxes = self.bbox_inference(img_path)    
+        img = plot_boxes_cv2(img, boxes[0], class_names=self.class_names, disp = disp)
 
         # Construct message        
-        df = construct_object_table(img, boxes, self.class_names, disp)
-        msg = get_instructions(df)
+        # df = construct_object_table(img, boxes, self.class_names, disp)
+        # msg = get_instructions(df)
 
         # Plot
         if plot:
@@ -210,8 +218,37 @@ class SightAI:
 
             plot_boxes_cv2(img, boxes[0], savename='frame/bbox{}.png'.format(j), class_names=self.class_names, disp = disp)
 
+        def create_grid(gimg, n = 6, cl = (91, 235, 52)):
+            h,w = gimg.shape[0:2]
+            print(h,w)
+            ys = [int(h*j/n) for j in range(1,n)]
+            xs = [int(w*j/n) for j in range(1,n)]
+            print(xs)
+            print(ys)
+            for x in xs:
+                cv2.line(gimg, (x, 0), (x, h), cl, 1, 1)
+            for y in ys:
+                cv2.line(gimg, (0, y), (w, y), cl, 1, 1)
+
+            sensor_gimg = gimg.copy()
+            start_xs = [int(h*j/n) for j in range(0,n)]
+            start_ys = [int(w*j/n) for j in range(0,n)]
+            end_xs = [int(h*j/n) for j in range(1,n+1)]
+            end_ys = [int(w*j/n) for j in range(1,n+1)]
+            for x1, x2 in zip(start_xs, end_xs):
+                for y1, y2 in zip(start_ys, end_ys):
+                    sensor_gimg[x1:x2, y1:y2, :] = np.mean(sensor_gimg[x1:x2, y1:y2, :])
+
+            return gimg, sensor_gimg
+
+        dmap = convert_rgb(disp)
+        grid_dmap = dmap.copy()
+        grid_dmap, sensor_gimg = create_grid(grid_dmap)    
+        
+
         t1 = time.time()
         total_time = round(t1-t0, 2)
         self.log.info("1 - Done inference_image {}. -- {} minutes {} seconds".format(img_path, total_time//60, total_time % 60))
 
-        return msg, df
+        # return msg, df
+        return dmap, img, grid_dmap, sensor_gimg
