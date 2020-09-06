@@ -148,11 +148,11 @@ def plot_boxes_cv2(img, boxes, savename=None, class_names=None, color=None, disp
             # img = cv2.putText(img, caption, (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1.2, rgb, 1)
             img = cv2.putText(img, caption, (x1, y1), cv2.FONT_HERSHEY_PLAIN, 0.8, rgb, 1)
         img = cv2.rectangle(img, (x1, y1), (x2, y2), rgb, 1)
-    if savename:
-        print("save plot results to %s" % savename)
-        cv2.imwrite(savename, img)
-        plt.imshow(img)
-        plt.savefig("bbox.png")
+    # if savename:
+    #     print("save plot results to %s" % savename)
+    #     cv2.imwrite(savename, img)
+    #     plt.imshow(img)
+    #     plt.savefig("bbox.png")
     return img
 
 

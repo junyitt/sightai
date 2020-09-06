@@ -8,7 +8,7 @@ import skimage.transform
 import matplotlib.pyplot as plt
 from easydict import EasyDict as edict
 from logzero import setup_logger, logging 
-from monodepth.main_monodepth_pytorch import Model as DepthModel
+# from monodepth.main_monodepth_pytorch import Model as DepthModel
 from tool.darknet2pytorch import Darknet
 from tool.utils import plot_boxes_cv2, load_class_names
 from tool.torch_utils import do_detect
@@ -124,7 +124,7 @@ class SightAI:
         # self.init_depth_model()
         self.init_depth_bts_model()
         self.init_yolo_model()
-        self.inference(img_path = "image/image/init.png")
+        self.inference(img_path = "media/init.png")
     
     def init_log(self):
         self.log = setup_logger(name="sightailog", logfile="./logs/sightai.txt", level=logging.INFO)
@@ -149,25 +149,25 @@ class SightAI:
         total_time = round(t1-t0, 2)
         self.log.info("1 - Initiated YOLOv4. -- {} minutes {} seconds".format(total_time//60, total_time % 60))
 
-    def init_depth_model(self):
-        t0 = time.time()
-        dict_parameters_test = edict({'data_dir':'./image',
-                                    'model_path':'./pretrained/monodepth_resnet18_001.pth',
-                                    'output_directory':'data/output/',
-                                    'input_height':256,
-                                    'input_width':512,
-                                    'model':'resnet18_md',
-                                    'pretrained':False,
-                                    'mode':'test',
-                                    'device':'{}:0'.format(self.device),
-                                    'input_channels':3,
-                                    'num_workers':0,
-                                    'use_multiple_gpu':False})
-        self.depth_model = DepthModel(dict_parameters_test)
-        self.depth_model.test()
-        t1 = time.time()
-        total_time = round(t1-t0, 2)
-        self.log.info("1 - Initiated DepthModel. -- {} minutes {} seconds".format(total_time//60, total_time % 60))
+    # def init_depth_model(self):
+    #     t0 = time.time()
+    #     dict_parameters_test = edict({'data_dir':'./image',
+    #                                 'model_path':'./pretrained/monodepth_resnet18_001.pth',
+    #                                 'output_directory':'data/output/',
+    #                                 'input_height':256,
+    #                                 'input_width':512,
+    #                                 'model':'resnet18_md',
+    #                                 'pretrained':False,
+    #                                 'mode':'test',
+    #                                 'device':'{}:0'.format(self.device),
+    #                                 'input_channels':3,
+    #                                 'num_workers':0,
+    #                                 'use_multiple_gpu':False})
+    #     self.depth_model = DepthModel(dict_parameters_test)
+    #     self.depth_model.test()
+    #     t1 = time.time()
+    #     total_time = round(t1-t0, 2)
+    #     self.log.info("1 - Initiated DepthModel. -- {} minutes {} seconds".format(total_time//60, total_time % 60))
 
     def init_depth_bts_model(self):
         t0 = time.time()
@@ -220,11 +220,8 @@ class SightAI:
 
         def create_grid(gimg, n = 6, cl = (91, 235, 52)):
             h,w = gimg.shape[0:2]
-            print(h,w)
             ys = [int(h*j/n) for j in range(1,n)]
             xs = [int(w*j/n) for j in range(1,n)]
-            print(xs)
-            print(ys)
             for x in xs:
                 cv2.line(gimg, (x, 0), (x, h), cl, 1, 1)
             for y in ys:
