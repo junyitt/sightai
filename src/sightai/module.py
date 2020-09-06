@@ -211,12 +211,12 @@ class SightAI:
 
         # Plot
         if plot:
-            cv2.imwrite('output/depth_map{}.png'.format(j), disp)
-
+            cv2.imwrite('output/_{}'.format(os.path.basename(img_path)), disp)
+            
             # plt.imshow(disp, cmap='plasma')
             # plt.savefig('frame/depth_map{}.png'.format(j))
-
             plot_boxes_cv2(img, boxes[0], savename='output/bbox{}.png'.format(j), class_names=self.class_names, disp = disp)
+
 
         def create_grid(gimg, n = 6, cl = (91, 235, 52)):
             h,w = gimg.shape[0:2]

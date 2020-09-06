@@ -1,81 +1,31 @@
 import cv2
+import argparse
 import numpy as np
-from sightai.module import SightAI
+from sightai.video import SightVideo
 
 
-S = SightAI(use_cuda = True)
-
-filename = "two_way"
-vidcap = cv2.VideoCapture('media/{}.mp4'.format(filename))
-frame_width = int(vidcap.get(3))
-frame_height = int(vidcap.get(4))
-
-fourcc = cv2.VideoWriter_fourcc(*'XVID')
-out4 = cv2.VideoWriter('output_video/out_{}.avi'.format(filename), fourcc, 30.0, (frame_width*2,frame_height*2))
-
-if (vidcap.isOpened()== False): 
-    print("Error opening video stream or file")
-
-max_count = 20 # no limit
-success,image = vidcap.read()
-count = 0
-play = 0
-while(vidcap.isOpened()):
-    success,image = vidcap.read()
+def get_args():
+    parser = argparse.ArgumentParser('Test on an image.')
     
-    if success:
-        imgfile = "./output/fr{}.jpg".format(count)
-        dimgfile = "./output/dmap_{}.jpg".format(count)
-        dimgfile2 = "./output/dmap2_{}.jpg".format(count)
-        dimgfile3 = "./output/dmap3_{}.jpg".format(count)
-        dimgfile4 = "./output/dmap4_{}.jpg".format(count)
-        cv2.imwrite(imgfile, image)
+    parser.add_argument('-input', type=str,
+                        default='media/two_way.mp4',
+                        help='path of your video file.', dest='vidpath')
 
-        dmap, img, grid_dmap, sensor_gimg = S.inference(imgfile, plot = False, j = count)  
+    parser.add_argument('-fps', type=float,
+                        default=30.0,
+                        help='Input video fps.', dest='input_fps')
 
-        top = np.hstack((img, dmap))
-        bottom = np.hstack((grid_dmap, sensor_gimg))
-        result = np.vstack((top, bottom))
+    parser.add_argument('-max', type=int,
+                        default=20,
+                        help='Maximum number of frames in output video.', dest='max_output_frames')
 
 
-        # cv2.imwrite(imgfile, image)
-        # cv2.imwrite(dimgfile2, grid_dmap)
-        # cv2.imwrite(dimgfile3, sensor_gimg)
-        cv2.imwrite(dimgfile4, result)
+    args = parser.parse_args()
 
-        # o1 = cv2.imread(imgfile)
-        # o2 = cv2.imread(dimgfile2)
-        # o3 = cv2.imread(dimgfile3)
-        o4 = cv2.imread(dimgfile4)
+    return args
 
-        
-        # cv2.imshow('Frame',dmap2)
-        # out1.write(o1)
-        # out2.write(o2)
-        # out3.write(o3)
-        out4.write(o4)
-        # out.write(img)
-        # cv2.imshow('image',dmap)
-        
-        # out.write(dmap)
-        if cv2.waitKey(25) & 0xFF == ord('q'):
-            break
-    else:
-        break
 
-    count += 1
-    play += 1
+if __name__ == '__main__':
+    args = get_args()
+    S = SightVideo(vidpath = args.vidpath, input_fps = args.input_fps, max_output_frames = args.max_output_frames)
     
-    if max_count is not None:
-        if count > max_count:
-            break
-
-vidcap.release()
-# out1.release()
-# out2.release()
-# out3.release()
-out4.release()
-
-cv2.destroyAllWindows()
-print("done")
-

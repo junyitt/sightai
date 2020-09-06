@@ -24,15 +24,15 @@ place them under:
 ## Example scripts:
 ### Run demo on sample images
 ```
-python run_demo_image.py
+python run_demo_image.py -input media/165_R.png -plot 1
 ```
-Output can be found at src/output/depth_map0.png
+Output can be found at src/output/_165_R.png
 
 ### Run demo on stairs.mp4
 ```
-python run_demo_video.py
+python run_demo_video.py -input media/two_way.mp4 -fps 30.0 -max 20
 ```
-Output can be found at src/output_video/stairs_out.avi. Currently limited to first 20 frames.
+Output can be found at src/output_video/out_two_way.avi. Currently limited to first 20 frames.
 
 
 ## Credits
