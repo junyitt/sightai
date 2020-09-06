@@ -22,22 +22,17 @@ place them under:
 2. Depth Map -> Calculate mean on Depth Map (for each grid area) to produce Vibrational Mappings
 
 ## Example scripts:
-### Run depth map estimation 
+### Run demo on sample images
 ```
-cd src
-python demo_depth_map.py
+python run_demo_image.py
 ```
-
-### Run object detection
-```
-python demo_yolo.py
-```
+Output can be found at src/output/depth_map0.png
 
 ### Run demo on stairs.mp4
 ```
-python load_video.py
+python run_demo_video.py
 ```
-Output can be found at src/stairs_out.avi
+Output can be found at src/output_video/stairs_out.avi. Currently limited to first 20 frames.
 
 
 ## Credits
