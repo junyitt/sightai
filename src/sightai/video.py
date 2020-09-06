@@ -5,14 +5,15 @@ from sightai.module import SightAI
 
 
 class SightVideo():
-    def __init__(self, vidpath, input_fps = 30.0, max_output_frames = None):
+    def __init__(self, vidpath, input_fps = 30.0, max_output_frames = None, use_cuda = 1):
+        self.use_cuda = use_cuda
         self.input_path = vidpath 
         self.output_path = os.path.join("output_video", "out_" + os.path.basename(vidpath).split(".")[0] + ".avi")
         self.run_inference(input_fps = input_fps, max_output_frames=max_output_frames)
 
     def run_inference(self, input_fps = 30.0, max_output_frames  = None):
         # initialize inference module
-        S = SightAI(use_cuda = True)
+        S = SightAI(use_cuda = self.use_cuda)
 
         vidcap = cv2.VideoCapture(self.input_path)
         frame_width = int(vidcap.get(3))

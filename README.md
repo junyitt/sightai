@@ -17,6 +17,7 @@ This project aims to do the same on vision by creating a Vision Encoding System 
 ```
 conda env create --file environment.yml
 conda activate sightai
+cd src
 ```
 
 ### Download Model Weights
@@ -29,16 +30,17 @@ Download weights for [BTS](https://drive.google.com/file/d/1_mENn0G9YlLAAr3N8DVD
 ### Example scripts:
 #### Run demo on sample image
 ```
-python run_demo_image.py -input media/165_R.png -plot 1
+python run_demo_image.py -input media/165_R.png -plot 1 -cuda 1
 ```
 Output can be found at src/output/_165_R.png
 
 #### Run demo on sample video
 ```
-python run_demo_video.py -input media/two_way.mp4 -fps 30.0 -max 20
+python run_demo_video.py -input media/two_way.mp4 -fps 30.0 -max 20 -cuda 1
 ```
 Output can be found at src/output_video/out_two_way.avi. Currently limited to first 20 frames.
-
+  
+Note: Set -cuda 0 to run on cpu.
 
 ### Credits
 #### YOLOv4 pytorch implementation by Tianxiaomo

@@ -2,6 +2,7 @@ import os
 import cv2
 import numpy as np
 import pandas as pd
+import torch
 from PIL import Image
 import time
 import skimage.transform
@@ -115,11 +116,13 @@ def get_instructions(df, threshold = 32):
    
 class SightAI:
     def __init__(self, use_cuda = True):
-        self.use_cuda = use_cuda
-        if self.use_cuda:
+        if torch.cuda.is_available() and use_cuda:
             self.device = "cuda"
+            self.use_cuda = True
         else:
             self.device = "cpu"
+            self.use_cuda = False
+
         self.init_log()
         # self.init_depth_model()
         self.init_depth_bts_model()
@@ -136,12 +139,11 @@ class SightAI:
         cfgfile = "./cfg/yolov4.cfg"
         weightfile = "./pretrained/yolov4.weights"
         namesfile = 'data/coco.names'
-        use_cuda = self.use_cuda
 
         self.darknet_model = Darknet(cfgfile)
         self.yolo_width, self.yolo_height = (self.darknet_model.width, self.darknet_model.height)
         self.darknet_model.load_weights(weightfile)
-        if use_cuda:
+        if self.use_cuda:
             self.darknet_model.cuda()
         self.class_names = load_class_names(namesfile)
 
