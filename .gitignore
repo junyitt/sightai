@@ -7,16 +7,16 @@ src/media/*
 !src/media/001_L.png
 !src/media/165_R.png
 !src/media/init.png
+!src/media/two_way.mp4
 
 src/pretrained/*
 !src/pretrained/Readme.md
 src/logs/*
 !src/logs/Readme.md
-src/frame/*
-!src/frame/placeholder.txt
-src/frame2/*
-src/frame*/*
-src/bbox.png
+src/output/*
+!src/output/placeholder.txt
+src/output_video/*
+!src/output_video/placeholder.txt
 src/tensorboard/*
 src/data/output/disparities.npy
 src/data/output/disparities_pp.npy
