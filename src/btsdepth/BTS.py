@@ -475,9 +475,12 @@ class BtsController:
 
         torch.save(save_dict, path)
 
-    def load_model(self, path):
-        dict = torch.load(path)
-
+    def load_model(self, path, use_cuda=True):
+        if use_cuda:
+            dict = torch.load(path)
+        else:
+            dict = torch.load(path, map_location=torch.device('cpu'))
+            
         if USE_APEX:
             saved_opt_level = dict["opt_level"]
             self.bts, self.optimizer = apex.amp.initialize(self.bts, self.optimizer, opt_level=saved_opt_level)

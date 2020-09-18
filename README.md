@@ -13,11 +13,18 @@ This project aims to do the same on vision by creating a Vision Encoding System 
 
 
 ## Getting Started
-### Create conda environment
+### Create conda environment (GPU)
 ```
 conda env create --file environment.yml
 conda activate sightai
 cd src
+```
+
+### Create conda environment for CPU (not fully supported)
+```
+conda env create --file cpu_environment.yml
+conda activate sightai_cpu
+pip install torch==1.5.1+cpu torchvision==0.6.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
 ### Download Model Weights
@@ -40,7 +47,7 @@ python run_demo_video.py -input media/two_way.mp4 -fps 30.0 -max 20 -cuda 1
 ```
 Output can be found at src/output_video/out_two_way.avi. Currently limited to first 20 frames.
   
-Note: Set -cuda 0 to run on cpu.
+Note: Set -cuda 0 to run on cpu. (Not fully supported yet)
 
 ### Credits
 #### YOLOv4 pytorch implementation by Tianxiaomo

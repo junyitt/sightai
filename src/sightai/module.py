@@ -175,7 +175,7 @@ class SightAI:
         t0 = time.time()
         model_path = "pretrained/bts_latest"
         self.depth_model = BTS.BtsController()
-        self.depth_model.load_model(model_path)
+        self.depth_model.load_model(model_path, use_cuda=self.use_cuda)
         self.depth_model.eval()
 
         t1 = time.time()
